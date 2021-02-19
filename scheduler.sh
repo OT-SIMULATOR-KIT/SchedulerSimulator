@@ -24,4 +24,14 @@ function launchInstance() {
     executeInstruction "docker run -d --rm -l ${APP_ID} ${IMAGE_NAME}"
 }
 
+function getAppContainers {
+    APP_ID=$1
+    result=`docker ps --filter "label=${APP_ID}" --format "\"{{.Names}}\","`
+    echo $result
+}
+
 launchInstance nginx empui
+launchInstance nginx empui
+launchInstance nginx empui
+
+getAppContainers empui

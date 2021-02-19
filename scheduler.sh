@@ -1,7 +1,7 @@
 # Run any Docker image on your local system, simulate some load and if the cpu utilization is more than x% then another container should get spinned up. In similar fashion you can implement de scaling as well
 
 #scheduler.sh <id> <image> <min> <desired> <max> <scaling percentage>
-#scheduler.sh app nginx 1 2 5 80
+#scheduler.sh empui nginx 1 2 5 80
 
 # Operations
 #    - Launch instances as per desired count
@@ -19,9 +19,9 @@ function executeInstruction() {
 
 function launchInstance() {
     IMAGE_NAME=$1
-    CONTAINER_NAME=$2
+    APP_ID=$2
 
-    executeInstruction "docker run -d --rm --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+    executeInstruction "docker run -d --rm -l ${APP_ID} ${IMAGE_NAME}"
 }
 
-launchInstance nginx sandy4
+launchInstance nginx empui

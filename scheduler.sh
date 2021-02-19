@@ -30,6 +30,11 @@ function getAppContainers {
     echo $result
 }
 
+function getContainerCPUUtilization {
+    CONTAINER_NAME=$1
+    docker stats --no-stream  ${CONTAINER_NAME} --format "{{.CPUPerc}}"
+}
+
 launchInstance nginx empui
 launchInstance nginx empui
 launchInstance nginx empui

@@ -35,8 +35,28 @@ function getContainerCPUUtilization {
     docker stats --no-stream  ${CONTAINER_NAME} --format "{{.CPUPerc}}"
 }
 
-#launchInstance nginx empui
-#launchInstance nginx empui
-#launchInstance nginx empui
+launchInstance nginx empui
+launchInstance nginx empui
+launchInstance nginx empui
 
+function ensureDesiredState() {
+    desiredCount=$1
+    APP_ID=$2
+    containers=`getAppContainers ${APP_ID}`
+    containersArr=(`echo ${containers}`);
+    containersCount=`echo ${#containersArr[@]}`
+    if [[ ${containersCount} -gt ${desiredCount} ]]
+    then
+        delta=$((containersCount-desiredCount))
+        echo "Needs to be scaled down by ${delta}"
+    elif [[ ${containersCount} -lt ${desiredCount} ]]
+    then
+        delta=$((desiredCount-containersCount))
+        echo "Needs to be scaled up by ${delta}"
+    else
+        echo "We are at desired state"
+    fi
+}
 getAppContainers empui
+ensureDesiredState 1 empui 
+ensureDesiredState 6 empui 

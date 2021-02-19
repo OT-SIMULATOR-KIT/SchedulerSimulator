@@ -8,7 +8,7 @@
 #    - Check the CPU utilization of the instances for the specific app
 #    - Update desired count as per scaling policy
 
-#!/bin/bash
+#!/bin/zsh
 
 
 function executeInstruction() {
@@ -35,13 +35,10 @@ function getContainerCPUUtilization {
     docker stats --no-stream  ${CONTAINER_NAME} --format "{{.CPUPerc}}"
 }
 
-launchInstance nginx empui
-launchInstance nginx empui
-launchInstance nginx empui
-
 function ensureDesiredState() {
     desiredCount=$1
     APP_ID=$2
+    IMAGE=$3
     containers=`getAppContainers ${APP_ID}`
     containersArr=(`echo ${containers}`);
     containersCount=`echo ${#containersArr[@]}`
@@ -49,14 +46,30 @@ function ensureDesiredState() {
     then
         delta=$((containersCount-desiredCount))
         echo "Needs to be scaled down by ${delta}"
+        for (( containerIndex=$containersCount; containerIndex>$desiredCount; containerIndex-- ))
+        do  
+            containerName=$containersArr[${containerIndex}]  
+            echo "Deleting container ${containerName} with index ${containerIndex}"
+            executeInstruction "docker rm -f ${containerName}"
+        done
     elif [[ ${containersCount} -lt ${desiredCount} ]]
     then
         delta=$((desiredCount-containersCount))
         echo "Needs to be scaled up by ${delta}"
+        for (( containerIndex=$containersCount; containerIndex<$desiredCount; containerIndex++ ))
+        do  
+            echo "Creating container"
+            launchInstance ${IMAGE} ${APP_ID}
+        done
     else
         echo "We are at desired state"
     fi
 }
+
+launchInstance nginx empui
+launchInstance nginx empui
+launchInstance nginx empui
+
 getAppContainers empui
-ensureDesiredState 1 empui 
-ensureDesiredState 6 empui 
+ensureDesiredState 1 empui nginx
+#ensureDesiredState 6 empui nginx

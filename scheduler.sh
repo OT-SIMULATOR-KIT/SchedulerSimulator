@@ -26,7 +26,7 @@ function launchInstance() {
 
 function getAppContainers {
     APP_ID=$1
-    result=`docker ps --filter "label=${APP_ID}" --format "\"{{.Names}}\","`
+    result=`docker ps --filter "label=${APP_ID}" --format "{{.Names}}"`
     echo $result
 }
 
@@ -35,8 +35,8 @@ function getContainerCPUUtilization {
     docker stats --no-stream  ${CONTAINER_NAME} --format "{{.CPUPerc}}"
 }
 
-launchInstance nginx empui
-launchInstance nginx empui
-launchInstance nginx empui
+#launchInstance nginx empui
+#launchInstance nginx empui
+#launchInstance nginx empui
 
 getAppContainers empui

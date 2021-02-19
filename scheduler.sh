@@ -71,5 +71,5 @@ launchInstance nginx empui
 launchInstance nginx empui
 
 getAppContainers empui
-ensureDesiredState 1 empui nginx
-#ensureDesiredState 6 empui nginx
+ensureDesiredState 2 empui nginx
+ensureDesiredState 5 empui nginx

@@ -4,7 +4,24 @@
 #scheduler.sh app nginx 1 2 5 80
 
 # Operations
-#    - Lanch instances as per desired count
+#    - Launch instances as per desired count
 #    - Check the CPU utilization of the instances for the specific app
 #    - Update desired count as per scaling policy
+
 #!/bin/bash
+
+
+function executeInstruction() {
+    INSTRUCTION=$1
+    echo $INSTRUCTION
+    bash -c "$INSTRUCTION"
+}
+
+function launchInstance() {
+    IMAGE_NAME=$1
+    CONTAINER_NAME=$2
+
+    executeInstruction "docker run -d --rm --name ${CONTAINER_NAME} ${IMAGE_NAME}"
+}
+
+launchInstance nginx sandy4

@@ -30,9 +30,11 @@ function getAppContainers {
     echo $result
 }
 
-function getContainerCPUUtilization {
-    CONTAINER_NAME=$1
-    docker stats --no-stream  ${CONTAINER_NAME} --format "{{.CPUPerc}}"
+function getAppAvgCPUUtilization {
+    APP_ID=$1
+    containers=`getAppContainers ${APP_ID}`
+    containersArr=(`echo ${containers}`);
+    docker stats --no-stream  ${containersArr} --format "{{.CPUPerc}}"
 }
 
 function ensureDesiredState() {
